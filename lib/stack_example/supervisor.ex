@@ -7,6 +7,7 @@ defmodule StackExample.Supervisor do
 
   def init(:ok) do
     children = [
+      worker(StackExample.Database, ["./persist"]),
       worker(Stack, [[name: Stack]])
     ]
 

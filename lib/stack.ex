@@ -18,15 +18,17 @@ defmodule Stack do
   end
 
   def init(stack \\ []) do
-    {:ok, stack}
+    {:ok, StackExample.Database.get || stack}
   end
 
   def handle_call({:push, item}, _from, stack) do
     new_stack = [item | stack]
+    StackExample.Database.store(new_stack)
     {:reply, new_stack, new_stack}
   end
 
   def handle_call({:pop}, _from, [head | tail] = _stack) do
+    StackExample.Database.store(tail)
     {:reply, head, tail}
   end
 
