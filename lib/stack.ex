@@ -1,14 +1,37 @@
 defmodule Stack do
-  def init do
-    []
+  use GenServer
+
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def push(stack, item) do
-    [item | stack]
+  def push(item) do
+    GenServer.call(__MODULE__, {:push, item})
   end
 
-  def pop([first | rest] = _stack) do
-    {first, rest}
+  def pop do
+    GenServer.call(__MODULE__, {:pop})
+  end
+
+  def peek do
+    GenServer.call(__MODULE__, {:peek})
+  end
+
+  def init(stack \\ []) do
+    {:ok, stack}
+  end
+
+  def handle_call({:push, item}, _from, stack) do
+    new_stack = [item | stack]
+    {:reply, new_stack, new_stack}
+  end
+
+  def handle_call({:pop}, _from, [head | tail] = _stack) do
+    {:reply, head, tail}
+  end
+
+  def handle_call({:peek}, _from, stack) do
+    {:reply, stack, stack}
   end
 end
 
