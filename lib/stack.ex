@@ -5,16 +5,16 @@ defmodule Stack do
     GenServer.start_link(__MODULE__, [], opts)
   end
 
-  def push(pid, item) do
-    GenServer.call(pid, {:push, item})
+  def push(item) do
+    GenServer.call(__MODULE__, {:push, item})
   end
 
-  def pop(pid) do
-    GenServer.call(pid, {:pop})
+  def pop do
+    GenServer.call(__MODULE__, {:pop})
   end
 
-  def peek(pid) do
-    GenServer.call(pid, {:peek})
+  def peek do
+    GenServer.call(__MODULE__, {:peek})
   end
 
   def init(stack \\ []) do
@@ -28,6 +28,10 @@ defmodule Stack do
 
   def handle_call({:pop}, _from, [head | tail] = _stack) do
     {:reply, head, tail}
+  end
+
+  def handle_call({:pop}, _from, [] = stack) do
+    {:reply, nil, stack}
   end
 
   def handle_call({:peek}, _from, stack) do
