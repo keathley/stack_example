@@ -1,20 +1,20 @@
 defmodule Stack do
   use GenServer
 
-  def start_link do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(opts \\ []) do
+    GenServer.start_link(__MODULE__, [], opts)
   end
 
-  def push(item) do
-    GenServer.call(__MODULE__, {:push, item})
+  def push(pid, item) do
+    GenServer.call(pid, {:push, item})
   end
 
-  def pop do
-    GenServer.call(__MODULE__, {:pop})
+  def pop(pid) do
+    GenServer.call(pid, {:pop})
   end
 
-  def peek do
-    GenServer.call(__MODULE__, {:peek})
+  def peek(pid) do
+    GenServer.call(pid, {:peek})
   end
 
   def init(stack \\ []) do
